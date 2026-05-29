@@ -1,11 +1,241 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sistema Manicure</title>
+
+  <style>
+    /* Reset básico e configurações gerais */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #ffe0eb;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(90deg, #ff2e7a, #ff66a3);
+      color: white;
+      text-align: center;
+      padding: 25px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      color: #ff2e7a;
+      margin: 12px 0 6px;
+      font-size: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s ease;
+    }
+
+    input:focus {
+      border-color: #ff2e7a;
+      outline: none;
+    }
+
+    button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: filter 0.2s ease;
+    }
+
+    button:hover {
+      filter: brightness(1.1);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .btn-red {
+      background: #e53935;
+      color: white;
+    }
+
+    .btn-pink {
+      background: #ff2e7a;
+      color: white;
+    }
+
+    .item {
+      background: white;
+      padding: 8px;
+      margin: 8px 0;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .actions {
+      display: flex;
+      gap: 5px;
+    }
+  </style>
 </head>
+
 <body>
-    Olá mundo!
+
+  <header>
+    💅 Sistema de Manicure 💅
+  </header>
+
+  <div class="container">
+
+    <!-- CLIENTES -->
+    <section>
+      <h3>Clientes</h3>
+
+      {% for c in clientes %}
+        <div class="item">
+          <div><b>{{ c[1] }}</b> | {{ c[2] }}</div>
+          <div class="actions">
+            <a href="/delete_cliente/{{ c[0] }}">
+              <button class="btn-red">Excluir</button>
+            </a>
+            <button class="btn-pink"
+                    onclick="document.getElementById('editc{{ c[0] }}').style.display='block'">
+              Editar
+            </button>
+          </div>
+        </div>
+
+        <form id="editc{{ c[0] }}" method="POST"
+              action="/update_cliente/{{ c[0] }}"
+              style="display:none;margin-bottom:10px;">
+          <input name="nome" placeholder="Novo nome">
+          <input name="numero" placeholder="Novo número">
+          <button class="btn-pink">Salvar</button>
+        </form>
+      {% endfor %}
+
+      <div class="card">
+        <h3>Cliente</h3>
+        <form method="POST" action="/cliente">
+          <input name="nome" placeholder="Nome do cliente">
+          <input name="numero" placeholder="Número">
+          <button class="btn-pink">Salvar Cliente</button>
+        </form>
+      </div>
+    </section>
+
+
+    <!-- SERVIÇOS -->
+    <section>
+      <h3>Serviços</h3>
+
+      {% for s in servicos %}
+        <div class="item">
+          <div><b>{{ s[1] }}</b> | R$ {{ s[2] }}</div>
+          <div class="actions">
+            <a href="/delete_servico/{{ s[0] }}">
+              <button class="btn-red">Excluir</button>
+            </a>
+            <button class="btn-pink"
+                    onclick="document.getElementById('edits{{ s[0] }}').style.display='block'">
+              Editar
+            </button>
+          </div>
+        </div>
+
+        <form id="edits{{ s[0] }}" method="POST"
+              action="/update_servico/{{ s[0] }}"
+              style="display:none;margin-bottom:10px;">
+          <input name="nome" placeholder="Novo serviço">
+          <input name="valor" placeholder="Novo valor">
+          <button class="btn-pink">Salvar</button>
+        </form>
+      {% endfor %}
+
+      <div class="card">
+        <h3>Serviço</h3>
+        <form method="POST" action="/servico">
+          <input name="nome" placeholder="Nome do serviço">
+          <input name="valor" placeholder="Valor">
+          <button class="btn-pink">Salvar Serviço</button>
+        </form>
+      </div>
+    </section>
+
+
+    <!-- AGENDAMENTOS -->
+    <section>
+      <h3>Agendamentos</h3>
+
+      {% for a in agendamentos %}
+        <div class="item">
+          <div><b>{{ a[1] }}</b> - {{ a[2] }} | {{ a[3] }}</div>
+          <div class="actions">
+            <a href="/delete_agendamento/{{ a[0] }}">
+              <button class="btn-red">Excluir</button>
+            </a>
+            <button class="btn-pink"
+                    onclick="document.getElementById('edita{{ a[0] }}').style.display='block'">
+              Editar
+            </button>
+          </div>
+        </div>
+
+        <form id="edita{{ a[0] }}" method="POST"
+              action="/update_agendamento/{{ a[0] }}"
+              style="display:none;margin-bottom:10px;">
+          <input name="cliente_id" placeholder="Cliente ID">
+          <input name="servico_id" placeholder="Serviço ID">
+          <input name="data" type="date">
+          <button class="btn-pink">Salvar</button>
+        </form>
+      {% endfor %}
+
+      <div class="card">
+        <h3>Agendamento</h3>
+        <form method="POST" action="/agendar">
+          <input name="cliente_id" placeholder="ID Cliente">
+          <input name="servico_id" placeholder="ID Serviço">
+          <input name="data" type="date">
+          <button class="btn-pink">Agendar</button>
+        </form>
+      </div>
+    </section>
+
+  </div>
+
 </body>
 </html>
