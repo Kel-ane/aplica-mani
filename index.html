@@ -1,241 +1,413 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sistema Manicure</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Manicure</title>
 
-  <style>
-    /* Reset básico e configurações gerais */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #ffe0eb;
-      color: #333;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #ffe0eb;
+            color: #333;
+        }
 
-    header {
-      background: linear-gradient(90deg, #ff2e7a, #ff66a3);
-      color: white;
-      text-align: center;
-      padding: 25px;
-      font-size: 22px;
-      font-weight: bold;
-    }
+        header {
+            background: linear-gradient(90deg, #ff2e7a, #ff66a3);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 22px;
+            font-weight: bold;
+        }
 
-    .container {
-      width: 90%;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 15px;
-    }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: auto;
+            padding: 15px;
+        }
 
-    .card {
-      background: white;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+        .card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-    h3 {
-      color: #ff2e7a;
-      margin: 12px 0 6px;
-      font-size: 16px;
-    }
+        h3 {
+            color: #ff2e7a;
+        }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 6px 0;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 14px;
-      transition: border-color 0.2s ease;
-    }
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 6px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: white;
+        }
 
-    input:focus {
-      border-color: #ff2e7a;
-      outline: none;
-    }
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #ff2e7a;
+        }
 
-    button {
-      padding: 8px 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 500;
-      transition: filter 0.2s ease;
-    }
+        button {
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
 
-    button:hover {
-      filter: brightness(1.1);
-    }
+        .btn-pink {
+            background: #ff2e7a;
+            color: white;
+        }
 
-    button:active {
-      transform: translateY(1px);
-    }
+        .btn-red {
+            background: #e53935;
+            color: white;
+        }
 
-    .btn-red {
-      background: #e53935;
-      color: white;
-    }
+        .item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .btn-pink {
-      background: #ff2e7a;
-      color: white;
-    }
-
-    .item {
-      background: white;
-      padding: 8px;
-      margin: 8px 0;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .actions {
-      display: flex;
-      gap: 5px;
-    }
-  </style>
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+    </style>
 </head>
 
 <body>
 
-  <header>
-    💅 Sistema de Manicure 💅
-  </header>
+    <header>
+        💅 Sistema de Manicure 💅
+    </header>
 
-  <div class="container">
+    <div class="container">
 
-    <!-- CLIENTES -->
-    <section>
-      <h3>Clientes</h3>
+        <!-- CLIENTES -->
+        <section>
 
-      {% for c in clientes %}
-        <div class="item">
-          <div><b>{{ c[1] }}</b> | {{ c[2] }}</div>
-          <div class="actions">
-            <a href="/delete_cliente/{{ c[0] }}">
-              <button class="btn-red">Excluir</button>
-            </a>
-            <button class="btn-pink"
-                    onclick="document.getElementById('editc{{ c[0] }}').style.display='block'">
-              Editar
-            </button>
-          </div>
-        </div>
+            <h3>Clientes</h3>
 
-        <form id="editc{{ c[0] }}" method="POST"
-              action="/update_cliente/{{ c[0] }}"
-              style="display:none;margin-bottom:10px;">
-          <input name="nome" placeholder="Novo nome">
-          <input name="numero" placeholder="Novo número">
-          <button class="btn-pink">Salvar</button>
-        </form>
-      {% endfor %}
+            {% for c in clientes %}
+            <div class="item">
 
-      <div class="card">
-        <h3>Cliente</h3>
-        <form method="POST" action="/cliente">
-          <input name="nome" placeholder="Nome do cliente">
-          <input name="numero" placeholder="Número">
-          <button class="btn-pink">Salvar Cliente</button>
-        </form>
-      </div>
-    </section>
+                <div>
+                    <b>{{ c[1] }}</b> |
+                    {{ c[2] }} |
+                    CPF: {{ c[3] }}
+                </div>
 
+                <div class="actions">
 
-    <!-- SERVIÇOS -->
-    <section>
-      <h3>Serviços</h3>
+                    <a href="/delete_cliente/{{ c[0] }}">
+                        <button class="btn-red">
+                            Excluir
+                        </button>
+                    </a>
 
-      {% for s in servicos %}
-        <div class="item">
-          <div><b>{{ s[1] }}</b> | R$ {{ s[2] }}</div>
-          <div class="actions">
-            <a href="/delete_servico/{{ s[0] }}">
-              <button class="btn-red">Excluir</button>
-            </a>
-            <button class="btn-pink"
-                    onclick="document.getElementById('edits{{ s[0] }}').style.display='block'">
-              Editar
-            </button>
-          </div>
-        </div>
+                    <button class="btn-pink"
+                        onclick="document.getElementById('editc{{ c[0] }}').style.display='block'">
+                        Editar
+                    </button>
 
-        <form id="edits{{ s[0] }}" method="POST"
-              action="/update_servico/{{ s[0] }}"
-              style="display:none;margin-bottom:10px;">
-          <input name="nome" placeholder="Novo serviço">
-          <input name="valor" placeholder="Novo valor">
-          <button class="btn-pink">Salvar</button>
-        </form>
-      {% endfor %}
+                </div>
 
-      <div class="card">
-        <h3>Serviço</h3>
-        <form method="POST" action="/servico">
-          <input name="nome" placeholder="Nome do serviço">
-          <input name="valor" placeholder="Valor">
-          <button class="btn-pink">Salvar Serviço</button>
-        </form>
-      </div>
-    </section>
+            </div>
 
+            <form id="editc{{ c[0] }}"
+                method="POST"
+                action="/update_cliente/{{ c[0] }}"
+                style="display:none;margin-bottom:10px;">
 
-    <!-- AGENDAMENTOS -->
-    <section>
-      <h3>Agendamentos</h3>
+                <input name="nome" placeholder="Nome">
+                <input name="telefone" placeholder="Telefone">
+                <input name="cpf" placeholder="CPF">
+                <input name="data_nascimento" type="date">
+                <input name="bairro" placeholder="Bairro">
+                <input name="rua" placeholder="Rua">
+                <input name="numero_casa" placeholder="Número da casa">
+                <input name="cidade" placeholder="Cidade">
+                <input name="estado" placeholder="UF">
+                <input name="cep" placeholder="CEP">
+                <input name="complemento" placeholder="Complemento">
 
-      {% for a in agendamentos %}
-        <div class="item">
-          <div><b>{{ a[1] }}</b> - {{ a[2] }} | {{ a[3] }}</div>
-          <div class="actions">
-            <a href="/delete_agendamento/{{ a[0] }}">
-              <button class="btn-red">Excluir</button>
-            </a>
-            <button class="btn-pink"
-                    onclick="document.getElementById('edita{{ a[0] }}').style.display='block'">
-              Editar
-            </button>
-          </div>
-        </div>
+                <button class="btn-pink">
+                    Salvar
+                </button>
 
-        <form id="edita{{ a[0] }}" method="POST"
-              action="/update_agendamento/{{ a[0] }}"
-              style="display:none;margin-bottom:10px;">
-          <input name="cliente_id" placeholder="Cliente ID">
-          <input name="servico_id" placeholder="Serviço ID">
-          <input name="data" type="date">
-          <button class="btn-pink">Salvar</button>
-        </form>
-      {% endfor %}
+            </form>
+            {% endfor %}
 
-      <div class="card">
-        <h3>Agendamento</h3>
-        <form method="POST" action="/agendar">
-          <input name="cliente_id" placeholder="ID Cliente">
-          <input name="servico_id" placeholder="ID Serviço">
-          <input name="data" type="date">
-          <button class="btn-pink">Agendar</button>
-        </form>
-      </div>
-    </section>
+            <div class="card">
 
-  </div>
+                <h3>Cliente</h3>
+
+                <form method="POST" action="/cliente">
+
+                    <input name="nome" placeholder="Nome">
+                    <input name="telefone" placeholder="Telefone">
+                    <input name="cpf" placeholder="CPF">
+                    <input name="data_nascimento" type="date">
+                    <input name="bairro" placeholder="Bairro">
+                    <input name="rua" placeholder="Rua">
+                    <input name="numero_casa" placeholder="Número da casa">
+                    <input name="cidade" placeholder="Cidade">
+                    <input name="estado" placeholder="UF">
+                    <input name="cep" placeholder="CEP">
+                    <input name="complemento" placeholder="Complemento">
+
+                    <button class="btn-pink">
+                        Salvar Cliente
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+        <!-- SERVIÇOS -->
+        <section>
+
+            <h3>Serviços</h3>
+
+            {% for s in servicos %}
+            <div class="item">
+
+                <div>
+                    <b>{{ s[1] }}</b> |
+                    R$ {{ s[2] }}
+                </div>
+
+                <div class="actions">
+
+                    <a href="/delete_servico/{{ s[0] }}">
+                        <button class="btn-red">
+                            Excluir
+                        </button>
+                    </a>
+
+                    <button class="btn-pink"
+                        onclick="document.getElementById('edits{{ s[0] }}').style.display='block'">
+                        Editar
+                    </button>
+
+                </div>
+
+            </div>
+
+            <form id="edits{{ s[0] }}"
+                method="POST"
+                action="/update_servico/{{ s[0] }}"
+                style="display:none;margin-bottom:10px;">
+
+                <input name="nome" placeholder="Novo serviço">
+                <input name="valor" placeholder="Novo valor">
+
+                <button class="btn-pink">
+                    Salvar
+                </button>
+
+            </form>
+            {% endfor %}
+
+            <div class="card">
+
+                <h3>Serviço</h3>
+
+                <form method="POST" action="/servico">
+
+                    <input name="nome" placeholder="Nome do serviço">
+                    <input name="valor" placeholder="Valor">
+
+                    <button class="btn-pink">
+                        Salvar Serviço
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+        <!-- PAGAMENTOS -->
+        <section>
+
+            <h3>Pagamentos</h3>
+
+            {% for p in pagamentos %}
+            <div class="item">
+
+                <div>
+                    <b>{{ p[1] }}</b>
+                </div>
+
+                <div class="actions">
+
+                    <a href="/delete_pagamento/{{ p[0] }}">
+                        <button class="btn-red">
+                            Excluir
+                        </button>
+                    </a>
+
+                    <button class="btn-pink"
+                        onclick="document.getElementById('editp{{ p[0] }}').style.display='block'">
+                        Editar
+                    </button>
+
+                </div>
+
+            </div>
+
+            <form id="editp{{ p[0] }}"
+                method="POST"
+                action="/update_pagamento/{{ p[0] }}"
+                style="display:none;margin-bottom:10px;">
+
+                <input name="nome" placeholder="Nome do pagamento">
+
+                <button class="btn-pink">
+                    Salvar
+                </button>
+
+            </form>
+            {% endfor %}
+
+            <div class="card">
+
+                <h3>Pagamento</h3>
+
+                <form method="POST" action="/pagamento">
+
+                    <input name="nome" placeholder="Nome do pagamento">
+
+                    <button class="btn-pink">
+                        Salvar Pagamento
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+        <!-- AGENDAMENTOS -->
+        <section>
+
+            <h3>Agendamentos</h3>
+
+            {% for a in agendamentos %}
+            <div class="item">
+
+                <div>
+                    <b>{{ a[1] }}</b> -
+                    {{ a[2] }} |
+                    {{ a[3] }}
+                </div>
+
+                <div class="actions">
+
+                    <a href="/delete_agendamento/{{ a[0] }}">
+                        <button class="btn-red">
+                            Excluir
+                        </button>
+                    </a>
+
+                    <button class="btn-pink"
+                        onclick="document.getElementById('edita{{ a[0] }}').style.display='block'">
+                        Editar
+                    </button>
+
+                </div>
+
+            </div>
+
+            <form id="edita{{ a[0] }}"
+                method="POST"
+                action="/update_agendamento/{{ a[0] }}"
+                style="display:none;margin-bottom:10px;">
+
+                <input name="id_cliente" placeholder="ID Cliente">
+                <input name="id_servico" placeholder="ID Serviço">
+                <input name="id_pagamento" placeholder="ID Pagamento">
+                <input name="data_hora" type="datetime-local">
+
+                <button class="btn-pink">
+                    Salvar
+                </button>
+
+            </form>
+            {% endfor %}
+
+            <div class="card">
+
+                <h3>Agendamento</h3>
+
+                <form method="POST" action="/agendar">
+
+                    <label>Cliente</label>
+                    <select name="id_cliente">
+                        {% for c in clientes %}
+                        <option value="{{ c[0] }}">
+                            {{ c[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <label>Serviço</label>
+                    <select name="id_servico">
+                        {% for s in servicos %}
+                        <option value="{{ s[0] }}">
+                            {{ s[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <label>Pagamento</label>
+                    <select name="id_pagamento">
+                        {% for p in pagamentos %}
+                        <option value="{{ p[0] }}">
+                            {{ p[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <label>Data e Hora</label>
+                    <input name="data_hora" type="datetime-local">
+
+                    <button class="btn-pink">
+                        Agendar
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </div>
 
 </body>
+
 </html>
